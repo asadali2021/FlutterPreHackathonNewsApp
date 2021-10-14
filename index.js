@@ -1,0 +1,31 @@
+const express = require('express');
+const cors = require('cors');
+const bd = require('body-parser');
+const app = express();
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+let todoModel = require('./models/todoschema'); 
+const mainRoute = require('./route/mainRoute');
+const port = 5000;
+app.use(cors());
+app.use(bd.urlencoded({
+    extended: false
+}));
+app.use(bd.json());
+app.use(mainRoute);
+mongoose.connect('mongodb+srv://asad:asadali123456@cluster0.k70wa.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',{
+    useNewUrlParser:true,
+    useUnifiedTopology:true
+});
+mongoose.connection.on("connected",()=>{
+    console.log("Database Connected")
+})
+mongoose.connection.on("error",()=>{
+    console.log("Database Not Connected")
+})
+app.get('/', (req,res)=>{
+    res.send('Welcome to this Node js');
+})
+app.listen(port, ()=>{
+    console.log('Server is running !');
+}) 
